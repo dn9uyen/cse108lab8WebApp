@@ -1,9 +1,9 @@
-import { createTheme } from '@mui/material/styles';
-import { } from '@mui/material/colors';
+import { createTheme } from "@mui/material/styles";
+import { } from "@mui/material/colors";
 
 const theme = createTheme({
     palette: {
-        mode: 'dark',
+        mode: "dark",
 
     },
 });

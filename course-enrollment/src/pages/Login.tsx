@@ -1,6 +1,6 @@
 import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper } from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as CookieUtil from "../CookieUtil"
@@ -58,26 +58,26 @@ export default function Login() {
 
                 <form onSubmit={handleSubmit}>
                     <Paper elevation={5} sx={{ width: "max-content", marginTop: "15px" }}>
-                        <FormControl sx={{ width: '25ch' }} variant="outlined">
+                        <FormControl sx={{ width: "25ch" }} variant="outlined">
                             <InputLabel htmlFor="username">Username</InputLabel>
                             <OutlinedInput
                                 required
                                 error={credentialError}
                                 name="username"
-                                type='text'
+                                type="text"
                                 label="Password"
                             />
                         </FormControl>
                     </Paper >
 
                     <Paper elevation={5} sx={{ width: "max-content", marginTop: "20px" }}>
-                        <FormControl sx={{ width: '25ch' }} variant="outlined">
+                        <FormControl sx={{ width: "25ch" }} variant="outlined">
                             <InputLabel htmlFor="password">Password</InputLabel>
                             <OutlinedInput
                                 required
                                 error={credentialError}
                                 name="password"
-                                type={showPassword ? 'text' : 'password'}
+                                type={showPassword ? "text" : "password"}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton onClick={handleClickTogglePassword}>
@@ -93,14 +93,14 @@ export default function Login() {
                         {credentialError ? "Incorrect username or password" : ""}
                     </FormHelperText>
 
-                    <Box textAlign='center' sx={{ marginTop: "20px" }}>
+                    <Box textAlign="center" sx={{ marginTop: "20px" }}>
                         <Button type="submit" variant="contained" sx={{ padding: "10px", width: "100%" }} > Login</Button>
                     </Box>
                 </form>
 
                 <Divider sx={{ marginTop: "10px", opacity: 1 }}>or</Divider>
 
-                <Box textAlign='center' sx={{ marginTop: "10px" }}>
+                <Box textAlign="center" sx={{ marginTop: "10px" }}>
                     <Button onClick={() => { navigate("/CreateAccount") }} variant="outlined" sx={{ padding: "10px", width: "100%" }}> Create account</Button>
                 </Box>
 

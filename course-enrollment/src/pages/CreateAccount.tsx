@@ -1,6 +1,6 @@
 import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Paper, Select, SelectChangeEvent } from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import * as CookieUtil from "../CookieUtil"
@@ -9,7 +9,7 @@ export default function CreateAccount() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = React.useState(false);
     const [usernameError, setUsernameError] = React.useState(false);
-    const [role, setRole] = React.useState('');
+    const [role, setRole] = React.useState("");
     const handleClickTogglePassword = () => { setShowPassword(!showPassword); }
 
     const handleRoleChange = (event: SelectChangeEvent) => {
@@ -51,18 +51,18 @@ export default function CreateAccount() {
     return (
         <Box sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Paper elevation={10} sx={{ padding: "15px", width: "max-content" }}>
-                <h3 style={{ textAlign: "center", margin: 0}}>Account Creation</h3>
+                <h3 style={{ textAlign: "center", margin: 0 }}>Account Creation</h3>
 
                 <form onSubmit={handleSubmit}>
                     {/* Username */}
                     <Paper elevation={5} sx={{ width: "max-content", marginTop: "15px" }}>
-                        <FormControl sx={{ width: '25ch' }} variant="outlined">
+                        <FormControl sx={{ width: "25ch" }} variant="outlined">
                             <InputLabel htmlFor="username">Username</InputLabel>
                             <OutlinedInput
                                 required
                                 error={usernameError}
                                 name="username"
-                                type='text'
+                                type="text"
                                 label="Password"
                             />
                         </FormControl>
@@ -73,12 +73,12 @@ export default function CreateAccount() {
 
                     {/* Full name */}
                     <Paper elevation={5} sx={{ width: "max-content", marginTop: "15px" }}>
-                        <FormControl sx={{ width: '25ch' }} variant="outlined">
+                        <FormControl sx={{ width: "25ch" }} variant="outlined">
                             <InputLabel htmlFor="fullname">Full Name</InputLabel>
                             <OutlinedInput
                                 required
                                 name="fullname"
-                                type='text'
+                                type="text"
                                 label="Full Name"
                             />
                         </FormControl>
@@ -86,12 +86,12 @@ export default function CreateAccount() {
 
                     {/* Password */}
                     <Paper elevation={5} sx={{ width: "max-content", marginTop: "20px" }}>
-                        <FormControl sx={{ width: '25ch' }} variant="outlined">
+                        <FormControl sx={{ width: "25ch" }} variant="outlined">
                             <InputLabel htmlFor="password">Password</InputLabel>
                             <OutlinedInput
                                 required
                                 name="password"
-                                type={showPassword ? 'text' : 'password'}
+                                type={showPassword ? "text" : "password"}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton onClick={handleClickTogglePassword}>
@@ -106,7 +106,7 @@ export default function CreateAccount() {
 
                     {/* Role */}
                     <Paper elevation={5} sx={{ width: "max-content", marginTop: "20px" }}>
-                        <FormControl sx={{ width: '25ch' }} variant="outlined">
+                        <FormControl sx={{ width: "25ch" }} variant="outlined">
                             <InputLabel htmlFor="role">Role</InputLabel>
                             <Select
                                 name="role"
@@ -123,14 +123,14 @@ export default function CreateAccount() {
                     </Paper >
 
                     {/* Submit button */}
-                    <Box textAlign='center' sx={{ marginTop: "20px" }}>
+                    <Box textAlign="center" sx={{ marginTop: "20px" }}>
                         <Button type="submit" variant="contained" sx={{ padding: "10px", width: "100%" }} > Create Account</Button>
                     </Box>
                 </form>
 
                 <Divider sx={{ marginTop: "10px", opacity: 1 }}>or</Divider>
 
-                <Box textAlign='center' sx={{ marginTop: "10px" }}>
+                <Box textAlign="center" sx={{ marginTop: "10px" }}>
                     <Button onClick={() => { navigate("/") }} variant="outlined" sx={{ padding: "10px", width: "100%" }}>Login instead</Button>
                 </Box>
             </Paper >

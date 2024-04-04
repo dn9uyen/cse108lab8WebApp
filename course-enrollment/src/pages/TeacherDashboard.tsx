@@ -1,6 +1,6 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Button, Paper, Tab } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import React, { useEffect } from "react";
 import LogoutComponent from "../components/LogoutComponent";
 import * as CookieUtil from "../CookieUtil"
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function TeacherDashboard() {
     const navigate = useNavigate();
-    const [tabValue, setTabValue] = React.useState('1');
+    const [tabValue, setTabValue] = React.useState("1");
     const [role, setRole] = React.useState(CookieUtil.getRoleCookie());
     const [name, setName] = React.useState(CookieUtil.getFullNameCookie());
 
@@ -42,7 +42,7 @@ export default function TeacherDashboard() {
                 <Box sx={{ padding: "2vh" }} />
 
                 <TabContext value={tabValue}>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <TabList onChange={handleTabChange} centered>
                             <Tab label="Current Courses" value="1" />
                             <Tab label="Register Courses" value="2" />

@@ -15,6 +15,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///courses.sqlite"
 @app.route("/account/create", methods=["OPTIONS"])
 @app.route("/account/courses", methods=["OPTIONS"])
 @app.route("/courses", methods=["OPTIONS"])
+@app.route("/account/courses/manage", methods=["OPTIONS"])
+@app.route("/account/courses/grades", methods=["OPTIONS"])
 def preflight():
     response = flask.make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")

@@ -1,7 +1,7 @@
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie"
 
 export function setUsernameCookie(username: string) {
-    Cookies.set('username', username, { expires: 1 })
+    Cookies.set("username", username, { expires: 1 })
 }
 
 export function getUsernameCookie(): string {
@@ -11,7 +11,7 @@ export function getUsernameCookie(): string {
 }
 
 export function setFullNameCookie(fullName: string) {
-    Cookies.set('fullname', fullName, { expires: 1 })
+    Cookies.set("fullname", fullName, { expires: 1 })
 }
 
 export function getFullNameCookie(): string {
@@ -21,7 +21,7 @@ export function getFullNameCookie(): string {
 }
 
 export function setSessionTokenCookie(sessionToken: string) {
-    Cookies.set('sessionToken', sessionToken, { expires: 1 })
+    Cookies.set("sessionToken", sessionToken, { expires: 1 })
 }
 
 export function getSessionTokenCookie(): string {
@@ -31,7 +31,7 @@ export function getSessionTokenCookie(): string {
 }
 
 export function setRoleCookie(role: string) {
-    Cookies.set('role', role, { expires: 1 })
+    Cookies.set("role", role, { expires: 1 })
 }
 
 export function getRoleCookie(): string {

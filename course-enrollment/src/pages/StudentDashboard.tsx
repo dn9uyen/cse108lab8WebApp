@@ -1,6 +1,6 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Paper, Tab } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import React, { useEffect } from "react";
 import LogoutComponent from "../components/LogoutComponent";
 import * as CookieUtil from "../CookieUtil"
@@ -62,7 +62,7 @@ export default function StudentDashboard() {
                 <Box sx={{ padding: "2vh" }} />
 
                 <TabContext value={tabValue}>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <TabList onChange={handleTabChange} centered>
                             <Tab label="Current Courses" value="current" />
                             <Tab label="Register Courses" value="register" />
