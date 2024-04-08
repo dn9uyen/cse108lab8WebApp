@@ -25,11 +25,12 @@ export default function EnrolledCoursesTableComponent(props) {
                 studentsEnrolled: course.seatsTaken + "/" + course.seatsTotal,
                 enrolled: course.enrolled
             });
-            setTable(rows)
         }
+        setTable(rows);
     }, [json]);
 
     const modifyCourse = async (newStatus: boolean, courseName: string) => {
+
         const response = await fetch("http://127.0.0.1:5000/account/courses", {
             method: newStatus ? "PUT" : "DELETE",
             headers: {
@@ -50,12 +51,12 @@ export default function EnrolledCoursesTableComponent(props) {
     const courseButton = (enrolled: boolean, courseName: string) => {
         if (enrolled) {
             return (
-                <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="contained" sx={{ fontSize: "1rem" }}>-</Button>
+                <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="contained" sx={{ fontSize: "1.25rem" }}>-</Button>
             )
         }
         else {
             return (
-                <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="outlined" sx={{ fontSize: "1rem" }}>+</Button>
+                <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="outlined" sx={{ fontSize: "1.25rem" }}>+</Button>
             )
         }
 

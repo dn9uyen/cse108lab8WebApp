@@ -47,7 +47,7 @@ export default function StudentDashboard() {
             <Paper elevation={10} sx={{ padding: "15px", width: "80vw" }}>
                 <Grid container spacing={2}>
                     <Grid xs={3}>
-                        <h4 style={{ margin: 0, paddingLeft: "5%" }}>{role} {name}</h4>
+                        <h4 style={{ margin: 0, paddingLeft: "5%" }}>Welcome, {name}!</h4>
                     </Grid>
                     <Grid xs={2.25} />
                     <Grid xs={4}>
@@ -64,8 +64,8 @@ export default function StudentDashboard() {
                 <TabContext value={tabValue}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <TabList onChange={handleTabChange} centered>
-                            <Tab label="Current Courses" value="current" />
-                            <Tab label="Register Courses" value="register" />
+                            <Tab label="My Courses" value="current" />
+                            <Tab label="Add Courses" value="register" />
                         </TabList>
                     </Box>
                     <TabPanel value="current"><EnrolledCoursesTableComponent json={json} /></TabPanel>

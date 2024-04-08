@@ -27,7 +27,7 @@ export default function TeacherDashboard() {
             <Paper elevation={10} sx={{ padding: "15px", width: "80vw" }}>
                 <Grid container spacing={2}>
                     <Grid xs={3}>
-                        <h4 style={{ margin: 0, paddingLeft: "5%" }}>{role} {name}</h4>
+                        <h4 style={{ margin: 0, paddingLeft: "5%" }}>Welcome {name}!</h4>
                     </Grid>
                     <Grid xs={2} />
                     <Grid xs={4}>
@@ -44,12 +44,12 @@ export default function TeacherDashboard() {
                 <TabContext value={tabValue}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <TabList onChange={handleTabChange} centered>
-                            <Tab label="Current Courses" value="1" />
-                            <Tab label="Register Courses" value="2" />
+                            <Tab label="My Courses" value="1" />
+
                         </TabList>
                     </Box>
                     <TabPanel value="1">Item One</TabPanel>
-                    <TabPanel value="2">Item Two</TabPanel>
+
                 </TabContext>
 
             </Paper >

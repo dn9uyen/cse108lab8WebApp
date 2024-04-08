@@ -3,6 +3,8 @@ from sqlalchemy import Column, String
 from secrets import token_hex
 
 from sqlalchemy import Boolean
+from sqlalchemy import Integer
+
 
 db = SQLAlchemy()
 
@@ -54,8 +56,8 @@ class Course(db.Model):
     courseName = Column(String, unique=True, nullable=False, primary_key=True)
     teacher = Column(String, nullable=False)
     time = Column(String, nullable=False)
-    seatsTotal = Column(String, nullable=False)
-    seatsTaken = Column(String, nullable=False)
+    seatsTotal = Column(Integer, nullable=False)
+    seatsTaken = Column(Integer, nullable=False)
 
     def __init__(self, courseName, teacher, time, seatsTotal, seatsTaken):
         self.courseName = courseName
@@ -74,6 +76,31 @@ class Token(db.Model):
         self.username = username
         self.token = token
 
+
+# populate fixed course table: hardcoded for now
+def populateCourseTable():
+    courses = [
+        {"courseName": "CSE100", "teacher": "teacher teach", "time": "all the time", "seatsTotal": 10, "seatsTaken": 1},
+        {"courseName": "CSE120", "teacher": "mcteach teacher", "time": "1am", "seatsTotal": 50, "seatsTaken": 49},
+        {"courseName": "CSE165", "teacher": "professor teacher", "time": "10am", "seatsTotal": 30, "seatsTaken": 20},
+        {"courseName": "CSE180", "teacher": "teacher professor", "time": "MTW", "seatsTotal": 100, "seatsTaken": 100}
+    ]
+    for course in courses:
+        courseInfo = Course(
+            courseName=course["courseName"],
+            teacher=course["teacher"],
+            time=course["time"],
+            seatsTotal=course["seatsTotal"],
+            seatsTaken=course["seatsTaken"]
+        )
+        db.session.add(courseInfo)
+
+    db.session.commit()
+
+
+def clearCourses(): # used this to delete some courses added by mistake
+    Course.query.delete()
+    db.session.commit()
 
 # Add new user, returns None if duplicate username
 def addUser(username, password, fullname, role):
