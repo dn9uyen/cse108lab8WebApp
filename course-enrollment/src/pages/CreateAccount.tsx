@@ -37,6 +37,7 @@ export default function CreateAccount() {
             CookieUtil.setUsernameCookie(responseJson["username"])
             CookieUtil.setSessionTokenCookie(responseJson["sessionToken"])
             CookieUtil.setRoleCookie(responseJson["role"])
+            CookieUtil.setFullNameCookie(responseJson["fullname"])
             if (responseJson["role"] == "Student") {
                 navigate("/StudentDashboard")
             } else if (responseJson["role"] == "Teacher") {
