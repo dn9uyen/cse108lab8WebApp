@@ -198,7 +198,8 @@ def addUserCourse():
         "time": course.time,
         "seatsTotal": course.seatsTotal,
         "seatsTaken": course.seatsTaken,
-        "enrolled": course.courseName == courseName and (UserCourse.query.filter_by(username=username, courseName=courseName, enrolled=True).first() is not None)
+        "enrolled": any(updated.enrolled for updated in UserCourse.query.filter_by(username=username, courseName=course.courseName)
+                        )
     } for course in updatedCourses]
 
 
@@ -247,7 +248,8 @@ def removeUserCourse():
         "time": course.time,
         "seatsTotal": course.seatsTotal,
         "seatsTaken": course.seatsTaken,
-        "enrolled": course.courseName == courseName and (UserCourse.query.filter_by(username=username, courseName=courseName, enrolled=True).first() is not None)
+        "enrolled": any(updated.enrolled for updated in UserCourse.query.filter_by(username=username, courseName=course.courseName)
+                        )
     } for course in updatedCourses]
 
     response = flask.make_response(json.dumps(courses))
