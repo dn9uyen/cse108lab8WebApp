@@ -265,10 +265,28 @@ def removeUserCourse():
 #     }
 @app.route("/account/courses/manage", methods=["POST"])
 def getCourseGrades():
-    # TODO: Implement
-    # waiting for teachers page
-    return "a"
+    body = flask.request.get_json()
+    username = body["username"]
+    sessionToken = body["sessionToken"]
+    courseName = body["courseName"]
 
+    if not authenticateUser(username, sessionToken):
+        print("unauthorized")
+        return flask.make_response("Unauthorized", 401)
+
+    userCourses = UserCourse.query.filter_by(courseName=courseName, enrolled=True).all()
+
+    grades = []
+    for userCourse in userCourses:
+        student = getUser(userCourse.username)
+        grades.append({
+            'name': student.fullname,
+            'grade': userCourse.grade
+        })
+
+    response = flask.make_response(json.dumps(grades))
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 # PUT /account/courses/grades
 #     returns updated list of students and grades for a course, used to modify grades
@@ -279,10 +297,39 @@ def getCourseGrades():
 #     ... etc ...
 #     }
 @app.route("/account/courses/grades", methods=["PUT"])
-def changeCourseGrade():
-    # TODO: Implement
-    return "a"
+def change_course_grade():
+    body = flask.request.get_json()
+    admin_username = body["username"]
+    session_token = body["sessionToken"]
+    course_name = body["courseName"]
+    student_fullname = body["name"]
+    new_grade = body["grade"]
 
+    if not authenticateUser(admin_username, session_token):
+        return flask.make_response("Unauthorized", 401)
+
+    student_user = User.query.filter_by(fullname=student_fullname).first()
+    if student_user:
+        student_username = student_user.username
+    else:
+        return flask.make_response("Student Not Found", 404)
+
+    user_course = UserCourse.query.filter_by(courseName=course_name, username=student_username).first()
+    if user_course:
+        user_course.grade = new_grade
+        db.session.commit()
+    else:
+        return flask.make_response("User Course Not Found", 404)
+
+    updated_grades = UserCourse.query.filter_by(courseName=course_name).all()
+    grades_json = [
+        {"name": getUser(uc.username).fullname, "grade": uc.grade}
+        for uc in updated_grades
+    ]
+
+    response = flask.make_response(json.dumps(grades_json))
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 if __name__ == "__main__":
     with app.app_context():
