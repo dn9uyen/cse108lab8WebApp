@@ -1,32 +1,43 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import * as CookieUtil from "../CookieUtil"
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { useEffect, useState } from "react";
+import * as CookieUtil from "../CookieUtil";
 
-export default function TeacherCoursesTableComponent(props) {
-    const [table, setTable] = useState([
-        {
-            courseName: "",
-            teacher: "",
-            time: "",
-            studentsEnrolled: "",
-        }
-    ])
+type CourseType = {
+  courseName: string;
+  teacher: string;
+  time: string;
+  seatsTaken: number;
+  seatsTotal: number;
+};
+
+type TableRowType = {
+    courseName: string;
+    teacher: string;
+    time: string;
+    studentsEnrolled: string;
+};
+
+interface TeacherCoursesTableComponentProps {
+    json: CourseType[];
+    onCourseSelect: (courseName: string) => void;
+}
+
+export default function TeacherCoursesTableComponent({ json, onCourseSelect }: TeacherCoursesTableComponentProps) {
+    const [table, setTable] = useState<TableRowType[]>([]);
 
     useEffect(() => {
-        const rows = []
-        for (const i in props.json) {
-            const course = props.json[i];
-            if (course.teacher == CookieUtil.getFullNameCookie()) {
-                rows.push({
-                    courseName: course.courseName,
-                    teacher: course.teacher,
-                    time: course.time,
-                    studentsEnrolled: course.seatsTaken + "/" + course.seatsTotal,
-                });
-            }
-        }
-        setTable(rows)
-    }, [props]);
+        const rows = json.filter(course => course.teacher === CookieUtil.getFullNameCookie()).map(course => ({
+          courseName: course.courseName,
+          teacher: course.teacher,
+          time: course.time,
+          studentsEnrolled: `${course.seatsTaken}/${course.seatsTotal}`,
+        }));
+        setTable(rows);
+    }, [json]);
+
+    const handleCourseSelect = (courseName: string) => {
+        onCourseSelect(courseName);
+    };
 
     return (
         <TableContainer component={Paper} sx={{}}>
@@ -42,7 +53,16 @@ export default function TeacherCoursesTableComponent(props) {
                 <TableBody>
                     {table.map((row) => (
                         <TableRow key={row.courseName}>
-                            <TableCell align="left"> {row.courseName} </TableCell>
+                            <TableCell align="left">
+                                <span
+                                    onClick={() => handleCourseSelect(row.courseName)}
+                                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                                    role="button"
+                                    tabIndex={0}
+                                    >
+                                    {row.courseName}
+                                </span>
+                            </TableCell>
                             <TableCell align="left">{row.teacher}</TableCell>
                             <TableCell align="left">{row.time}</TableCell>
                             <TableCell align="left">{row.studentsEnrolled}</TableCell>

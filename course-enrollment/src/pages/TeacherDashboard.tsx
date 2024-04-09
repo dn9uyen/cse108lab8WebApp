@@ -1,18 +1,19 @@
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Button, Paper, Tab } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
-import React, { useEffect } from "react";
-import LogoutComponent from "../components/LogoutComponent";
-import * as CookieUtil from "../CookieUtil"
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Box, Paper, Tab } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
+import LogoutComponent from "../components/LogoutComponent";
 import TeacherCoursesTableComponent from "../components/TeacherCoursesTableComponent";
+import CourseDetailsComponent from "../components/CourseDetailsComponent";
+import * as CookieUtil from "../CookieUtil";
 
 export default function TeacherDashboard() {
     const navigate = useNavigate();
-    const [tabValue, setTabValue] = React.useState("1");
-    const [role, setRole] = React.useState(CookieUtil.getRoleCookie());
-    const [name, setName] = React.useState(CookieUtil.getFullNameCookie());
-    const [json, setJson] = React.useState("")
+    const [tabValue, setTabValue] = useState("1");
+    const [name, setName] = useState(CookieUtil.getFullNameCookie());
+    const [json, setJson] = useState([]);
+    const [selectedCourse, setSelectedCourse] = useState(null);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
         setTabValue(newValue);
@@ -27,19 +28,18 @@ export default function TeacherDashboard() {
             body: JSON.stringify({ "username": CookieUtil.getUsernameCookie(), "sessionToken": CookieUtil.getSessionTokenCookie() })
         });
         const responseJson = await response.json();
-        console.log("Full" + CookieUtil.getFullNameCookie())
         setJson(responseJson);
     }
 
     useEffect(() => {
         getUserCourses();
-    }, []) // Run once on page load
+    }, []); // Run once on page load
 
     useEffect(() => {
-        if (CookieUtil.getRoleCookie() == "") {
-            navigate("/")
+        if (CookieUtil.getRoleCookie() === "") {
+            navigate("/");
         }
-    })
+    }, [navigate]);
 
     return (
         <Box sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -58,19 +58,22 @@ export default function TeacherDashboard() {
                     </Grid>
                 </Grid>
 
-                <Box sx={{ padding: "2vh" }} />
-
                 <TabContext value={tabValue}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <TabList onChange={handleTabChange} centered>
                             <Tab label="Your Courses" value="1" />
                         </TabList>
                     </Box>
-                    <TabPanel value="1"><TeacherCoursesTableComponent json={json} /></TabPanel>
+
+                    <TabPanel value="1">
+                        {selectedCourse ? (
+                            <CourseDetailsComponent course={selectedCourse} onBack={() => setSelectedCourse(null)} />
+                        ) : (
+                            <TeacherCoursesTableComponent json={json} onCourseSelect={setSelectedCourse} />
+                        )}
+                    </TabPanel>
                 </TabContext>
-
-            </Paper >
+            </Paper>
         </Box>
-    )
+    );
 }
-
