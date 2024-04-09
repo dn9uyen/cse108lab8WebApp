@@ -48,16 +48,23 @@ export default function EnrolledCoursesTableComponent(props) {
         setJson(responseJson);
     }
 
-    const courseButton = (enrolled: boolean, courseName: string) => {
+    const courseButton = (enrolled: boolean, courseName: string, seats: string) => {
+        const seatsArr = seats.split("/");
         if (enrolled) {
             return (
                 <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="contained" sx={{ fontSize: "1.25rem" }}>-</Button>
             )
         }
         else {
-            return (
-                <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="outlined" sx={{ fontSize: "1.25rem" }}>+</Button>
-            )
+            if (parseInt(seatsArr[1]) - parseInt(seatsArr[0]) == 0) {
+                return (
+                    <Button variant="outlined" color="warning" sx={{ fontSize: "1.25rem" }}>~</Button>
+                )
+            } else {
+                return (
+                    <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="outlined" sx={{ fontSize: "1.25rem" }}>+</Button>
+                )
+            }
         }
 
     }
@@ -81,7 +88,7 @@ export default function EnrolledCoursesTableComponent(props) {
                             <TableCell align="left">{row.teacher}</TableCell>
                             <TableCell align="left">{row.time}</TableCell>
                             <TableCell align="left">{row.studentsEnrolled}</TableCell>
-                            <TableCell align="left" sx={{ maxWidth: 100 }}>{courseButton(row.enrolled, row.courseName)}</TableCell>
+                            <TableCell align="left" sx={{ maxWidth: 100 }}>{courseButton(row.enrolled, row.courseName, row.studentsEnrolled)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
