@@ -42,13 +42,15 @@ class User(db.Model):
 class UserCourse(db.Model):
     __tablename__ = "userCourses"
     username = Column(String, nullable=False, primary_key=True)
-    courseName = Column(String, nullable=False)
+    courseName = Column(String, nullable=False, primary_key=True)
     enrolled = Column(Boolean, nullable=False)
+    grade = Column(String, nullable=False)
 
-    def __init__(self, username, courseName, enrolled):
+    def __init__(self, username, courseName, enrolled, grade):
         self.username = username
         self.courseName = courseName
         self.enrolled = enrolled
+        self.grade = grade
 
 
 class Course(db.Model):
