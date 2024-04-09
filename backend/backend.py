@@ -7,7 +7,6 @@ from database import *
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///courses.sqlite"
 
-
 # Needed for CORS
 @app.route("/account/login", methods=["OPTIONS"])
 @app.route("/account/logout", methods=["OPTIONS"])
@@ -186,7 +185,7 @@ def addUserCourse():
         return response
 
     # enroll user
-    addUser = UserCourse(username=username, courseName=courseName, enrolled=True)
+    addUser = UserCourse(username=username, courseName=courseName, enrolled=True, grade="0")
     course.seatsTaken = int(course.seatsTaken) + 1
     db.session.add(addUser)
     db.session.commit()
