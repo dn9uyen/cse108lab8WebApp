@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Paper
 } from "@mui/material";
 
@@ -29,6 +30,37 @@ const CourseDetailsTableComponent: React.FC<CourseDetailsProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const handleGradeChange = (index: any, value: any) => {
+    const newGrades = [...grades];
+    newGrades[index].grade = value;
+    setGrades(newGrades);
+  };
+
+  const saveGrade = async (name: any, grade: any) => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/account/courses/grades", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          sessionToken: sessionToken,
+          courseName: course,
+          name: name,
+          grade: grade,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save grade");
+      }
+
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   useEffect(() => {
     const fetchGrades = async () => {
       try {
@@ -37,7 +69,7 @@ const CourseDetailsTableComponent: React.FC<CourseDetailsProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username: username, sessionToken: sessionToken, courseName: course.courseName }),
+          body: JSON.stringify({ username: username, sessionToken: sessionToken, courseName: course }),
         });
 
         if (!response.ok) {
@@ -60,6 +92,10 @@ const CourseDetailsTableComponent: React.FC<CourseDetailsProps> = ({
     borderRight: '1px solid rgba(224, 224, 224, 1)',
   };
 
+  const gradeCellStyle = {
+    width: '30%',
+  };
+
   return (
     <div>
       <Button onClick={onBack}>Back</Button>
@@ -73,16 +109,24 @@ const CourseDetailsTableComponent: React.FC<CourseDetailsProps> = ({
             <TableHead>
               <TableRow style={{ borderBottom: '2px solid rgba(224, 224, 224, 1)' }}>
                 <TableCell style={cellStyle}>Student Name</TableCell>
-                <TableCell>Grade</TableCell>
+                <TableCell style={gradeCellStyle}>Grade</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {grades.map((grade) => (
+              {grades.map((grade, index) => (
                 <TableRow key={grade.name}>
                   <TableCell component="th" scope="row" style={cellStyle}>
                     {grade.name}
                   </TableCell>
-                  <TableCell>{grade.grade}</TableCell>
+                  <TableCell style={gradeCellStyle}>
+                    <TextField
+                      value={grade.grade}
+                      onChange={(e) => handleGradeChange(index, e.target.value)}
+                      onBlur={() => saveGrade(grade.name, grade.grade)}
+                      inputProps={{ style: { textAlign: 'right', width: '100%' } }}
+                      size="small"
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
