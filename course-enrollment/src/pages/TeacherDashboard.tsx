@@ -67,7 +67,12 @@ export default function TeacherDashboard() {
 
                     <TabPanel value="1">
                         {selectedCourse ? (
-                            <CourseDetailsComponent course={selectedCourse} onBack={() => setSelectedCourse(null)} />
+                            <CourseDetailsComponent 
+                                course={selectedCourse} 
+                                onBack={() => setSelectedCourse(null)}
+                                username={CookieUtil.getUsernameCookie()}
+                                sessionToken={CookieUtil.getSessionTokenCookie()}
+                            />
                         ) : (
                             <TeacherCoursesTableComponent json={json} onCourseSelect={setSelectedCourse} />
                         )}
