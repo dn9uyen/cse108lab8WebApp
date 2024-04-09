@@ -1,5 +1,6 @@
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import * as CookieUtil from "../CookieUtil"
 
 export default function TeacherCoursesTableComponent(props) {
     const [table, setTable] = useState([
@@ -15,7 +16,7 @@ export default function TeacherCoursesTableComponent(props) {
         const rows = []
         for (const i in props.json) {
             const course = props.json[i];
-            if (course.enrolled) {
+            if (course.teacher == CookieUtil.getFullNameCookie()) {
                 rows.push({
                     courseName: course.courseName,
                     teacher: course.teacher,

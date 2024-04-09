@@ -46,7 +46,7 @@ export default function TeacherDashboard() {
             <Paper elevation={10} sx={{ padding: "15px", width: "80vw" }}>
                 <Grid container spacing={2}>
                     <Grid xs={3}>
-                        <h4 style={{ margin: 0, paddingLeft: "5%" }}>{role} {name}</h4>
+                        <h4 style={{ margin: 0, paddingLeft: "5%" }}>Welcome {name}!</h4>
                     </Grid>
                     <Grid xs={2} />
                     <Grid xs={4}>
