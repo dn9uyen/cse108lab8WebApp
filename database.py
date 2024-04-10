@@ -1,11 +1,13 @@
+import flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_admin import BaseView, expose
+from flask import redirect, url_for
 from flask_admin.contrib.sqla import ModelView
 from sqlalchemy import Column, String
 from secrets import token_hex
 
 from sqlalchemy import Boolean
 from sqlalchemy import Integer
-
 
 db = SQLAlchemy()
 
@@ -54,7 +56,30 @@ class UserCourse(db.Model):
         self.grade = grade
 
 class UserAdminView(ModelView):
-    column_list = ['username', 'fullname', 'role']
+    column_exclude_list = ['password', ]
+    column_searchable_list = []
+    form_choices = {  # restrict the possible values for a text-field
+        'role': [
+            ('Student'),
+            ('Teacher'),
+            ('Admin')
+        ]
+    }
+
+class LogoutView(BaseView):
+    @expose('/')
+    def logout(self):
+        body = flask.request.get_json()
+        token = getToken(body["username"]).token
+        if body["sessionToken"] == token:
+            deleteToken(body["username"])
+            response = flask.make_response(flask.jsonify())
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            return (response, 204)
+        else:
+            response = flask.make_response(flask.jsonify())
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            return (response, 401)
 
 class Course(db.Model):
     __tablename__ = "courses"
@@ -117,7 +142,6 @@ def addUser(username, password, fullname, role):
     except:
         db.session.rollback()
         return None
-
 
 def getUser(username):
     return db.session.get_one(User, username)
