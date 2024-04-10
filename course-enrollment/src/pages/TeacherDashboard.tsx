@@ -33,7 +33,7 @@ export default function TeacherDashboard() {
 
     useEffect(() => {
         getUserCourses();
-    }, [selectedCourse]); // Run once on page load
+    }, [selectedCourse]);
 
     useEffect(() => {
         if (CookieUtil.getRoleCookie() === "") {
