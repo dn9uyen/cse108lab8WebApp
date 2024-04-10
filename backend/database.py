@@ -1,8 +1,13 @@
+import flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_admin import BaseView, expose
+from flask import redirect, url_for
+from flask_admin.contrib.sqla import ModelView
 from sqlalchemy import Column, String
 from secrets import token_hex
 
 from sqlalchemy import Boolean
+from sqlalchemy import Integer
 
 db = SQLAlchemy()
 
@@ -40,22 +45,34 @@ class User(db.Model):
 class UserCourse(db.Model):
     __tablename__ = "userCourses"
     username = Column(String, nullable=False, primary_key=True)
-    courseName = Column(String, nullable=False)
+    courseName = Column(String, nullable=False, primary_key=True)
     enrolled = Column(Boolean, nullable=False)
+    grade = Column(String, nullable=False)
 
-    def __init__(self, username, courseName, enrolled):
+    def __init__(self, username, courseName, enrolled, grade):
         self.username = username
         self.courseName = courseName
         self.enrolled = enrolled
+        self.grade = grade
 
+class UserAdminView(ModelView):
+    column_exclude_list = ['password', ]
+    column_searchable_list = []
+    form_choices = {  # restrict the possible values for a text-field
+        'role': [
+            ('Student'),
+            ('Teacher'),
+            ('Admin')
+        ]
+    }
 
 class Course(db.Model):
     __tablename__ = "courses"
     courseName = Column(String, unique=True, nullable=False, primary_key=True)
     teacher = Column(String, nullable=False)
     time = Column(String, nullable=False)
-    seatsTotal = Column(String, nullable=False)
-    seatsTaken = Column(String, nullable=False)
+    seatsTotal = Column(Integer, nullable=False)
+    seatsTaken = Column(Integer, nullable=False)
 
     def __init__(self, courseName, teacher, time, seatsTotal, seatsTaken):
         self.courseName = courseName
@@ -75,6 +92,31 @@ class Token(db.Model):
         self.token = token
 
 
+# populate fixed course table: hardcoded for now
+def populateCourseTable():
+    courses = [
+        {"courseName": "CSE100", "teacher": "teacher teach", "time": "all the time", "seatsTotal": 10, "seatsTaken": 1},
+        {"courseName": "CSE120", "teacher": "mcteach teacher", "time": "1am", "seatsTotal": 50, "seatsTaken": 49},
+        {"courseName": "CSE165", "teacher": "professor teacher", "time": "10am", "seatsTotal": 30, "seatsTaken": 20},
+        {"courseName": "CSE180", "teacher": "teacher professor", "time": "MTW", "seatsTotal": 100, "seatsTaken": 100}
+    ]
+    for course in courses:
+        courseInfo = Course(
+            courseName=course["courseName"],
+            teacher=course["teacher"],
+            time=course["time"],
+            seatsTotal=course["seatsTotal"],
+            seatsTaken=course["seatsTaken"]
+        )
+        db.session.add(courseInfo)
+
+    db.session.commit()
+
+
+def clearCourses(): # used this to delete some courses added by mistake
+    Course.query.delete()
+    db.session.commit()
+
 # Add new user, returns None if duplicate username
 def addUser(username, password, fullname, role):
     newUser = User(username, password, fullname, role)
@@ -86,10 +128,15 @@ def addUser(username, password, fullname, role):
         db.session.rollback()
         return None
 
-
 def getUser(username):
     return db.session.get_one(User, username)
 
+def getRole(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return user.role
+    else:
+        return None
 
 # Create new token and store it. Returns existing token if token for user already exists
 def createTokenAndStore(username):

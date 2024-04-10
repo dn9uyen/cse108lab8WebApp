@@ -6,7 +6,10 @@ export default function LogoutComponent(props: any) {
     const navigate = useNavigate()
 
     const logout = async () => {
-        let response = await fetch("http://127.0.0.1:5000/account/logout", {
+        const username = CookieUtil.getUsernameCookie();
+        const sessionToken = CookieUtil.getSessionTokenCookie();
+
+        const response = await fetch("http://127.0.0.1:5000/account/logout", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -14,9 +17,12 @@ export default function LogoutComponent(props: any) {
             body: JSON.stringify({ "username": username, "sessionToken": sessionToken })
         });
         // TODO: check response before redirect
-
-        CookieUtil.deleteCookiesLogout();
-        navigate("/");
+        if(response.status === 204){
+            CookieUtil.deleteCookiesLogout();
+            navigate("/");
+        } else {
+            console.error("Logout Error:", response.statusText);
+        }
     }
 
     return (

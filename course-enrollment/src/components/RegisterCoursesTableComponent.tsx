@@ -25,11 +25,12 @@ export default function EnrolledCoursesTableComponent(props) {
                 studentsEnrolled: course.seatsTaken + "/" + course.seatsTotal,
                 enrolled: course.enrolled
             });
-            setTable(rows)
         }
+        setTable(rows);
     }, [json]);
 
     const modifyCourse = async (newStatus: boolean, courseName: string) => {
+
         const response = await fetch("http://127.0.0.1:5000/account/courses", {
             method: newStatus ? "PUT" : "DELETE",
             headers: {
@@ -47,16 +48,23 @@ export default function EnrolledCoursesTableComponent(props) {
         setJson(responseJson);
     }
 
-    const courseButton = (enrolled: boolean, courseName: string) => {
+    const courseButton = (enrolled: boolean, courseName: string, seats: string) => {
+        const seatsArr = seats.split("/");
         if (enrolled) {
             return (
-                <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="contained" sx={{ fontSize: "1rem" }}>-</Button>
+                <Button variant="outlined" color="error" onClick={() => modifyCourse(!enrolled, courseName)} sx={{ fontSize: "1.25rem" }}>-</Button>
             )
         }
         else {
-            return (
-                <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="outlined" sx={{ fontSize: "1rem" }}>+</Button>
-            )
+            if (parseInt(seatsArr[1]) - parseInt(seatsArr[0]) == 0) {
+                return (
+                    <Button variant="outlined" color="warning" sx={{ fontSize: "1.25rem" }}>~</Button>
+                )
+            } else {
+                return (
+                    <Button onClick={() => modifyCourse(!enrolled, courseName)} variant="outlined" sx={{ fontSize: "1.25rem" }}>+</Button>
+                )
+            }
         }
 
     }
@@ -80,7 +88,7 @@ export default function EnrolledCoursesTableComponent(props) {
                             <TableCell align="left">{row.teacher}</TableCell>
                             <TableCell align="left">{row.time}</TableCell>
                             <TableCell align="left">{row.studentsEnrolled}</TableCell>
-                            <TableCell align="left" sx={{ maxWidth: 100 }}>{courseButton(row.enrolled, row.courseName)}</TableCell>
+                            <TableCell align="left" sx={{ maxWidth: 100 }}>{courseButton(row.enrolled, row.courseName, row.studentsEnrolled)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
