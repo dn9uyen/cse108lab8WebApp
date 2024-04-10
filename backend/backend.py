@@ -86,6 +86,7 @@ def logout():
 #     response: 403, forbidden
 @app.route("/account/create", methods=["POST"])
 def create():
+    #populateCourseTable()
     body = flask.request.get_json()
     # TODO: validate role string
     user = addUser(body["username"], body["password"], body["fullname"], body["role"])
