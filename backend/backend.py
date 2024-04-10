@@ -1,11 +1,16 @@
 import flask
 from flask import Flask
+from flask_admin import Admin
 import json
 from database import *
 
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///courses.sqlite"
+app.config['SECRET_KEY'] = 'password'
+
+admin = Admin(app, template_mode='bootstrap3')
+admin.add_view(UserAdminView(User, db.session))
 
 # Needed for CORS
 @app.route("/account/login", methods=["OPTIONS"])
@@ -86,7 +91,6 @@ def logout():
 #     response: 403, forbidden
 @app.route("/account/create", methods=["POST"])
 def create():
-    #populateCourseTable()
     body = flask.request.get_json()
     # TODO: validate role string
     user = addUser(body["username"], body["password"], body["fullname"], body["role"])
@@ -333,6 +337,7 @@ def change_course_grade():
     response = flask.make_response(json.dumps(grades_json))
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
+
 
 if __name__ == "__main__":
     with app.app_context():

@@ -1,10 +1,13 @@
+import flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_admin import BaseView, expose
+from flask import redirect, url_for
+from flask_admin.contrib.sqla import ModelView
 from sqlalchemy import Column, String
 from secrets import token_hex
 
 from sqlalchemy import Boolean
 from sqlalchemy import Integer
-
 
 db = SQLAlchemy()
 
@@ -52,6 +55,16 @@ class UserCourse(db.Model):
         self.enrolled = enrolled
         self.grade = grade
 
+class UserAdminView(ModelView):
+    column_exclude_list = ['password', ]
+    column_searchable_list = []
+    form_choices = {  # restrict the possible values for a text-field
+        'role': [
+            ('Student'),
+            ('Teacher'),
+            ('Admin')
+        ]
+    }
 
 class Course(db.Model):
     __tablename__ = "courses"
@@ -82,10 +95,10 @@ class Token(db.Model):
 # populate fixed course table: hardcoded for now
 def populateCourseTable():
     courses = [
-        {"courseName": "Math 101", "teacher": "Ralph Jenkins", "time": "MWF 10:00-10:50 AM", "seatsTotal": 8, "seatsTaken": 0},
-        {"courseName": "Physics 121", "teacher": "Susan Walker", "time": "TR 11:00-11:50 AM", "seatsTotal": 10, "seatsTaken": 0},
-        {"courseName": "CS 106", "teacher": "Ammon Hepworth", "time": "MWF 2:00-2:50 PM", "seatsTotal": 10, "seatsTaken": 0},
-        {"courseName": "CS 162", "teacher": "Ammon Hepworth", "time": "TR 3:00-3:50 PM", "seatsTotal": 4, "seatsTaken": 4}
+        {"courseName": "CSE100", "teacher": "teacher teach", "time": "all the time", "seatsTotal": 10, "seatsTaken": 1},
+        {"courseName": "CSE120", "teacher": "mcteach teacher", "time": "1am", "seatsTotal": 50, "seatsTaken": 49},
+        {"courseName": "CSE165", "teacher": "professor teacher", "time": "10am", "seatsTotal": 30, "seatsTaken": 20},
+        {"courseName": "CSE180", "teacher": "teacher professor", "time": "MTW", "seatsTotal": 100, "seatsTaken": 100}
     ]
     for course in courses:
         courseInfo = Course(
@@ -115,10 +128,15 @@ def addUser(username, password, fullname, role):
         db.session.rollback()
         return None
 
-
 def getUser(username):
     return db.session.get_one(User, username)
 
+def getRole(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return user.role
+    else:
+        return None
 
 # Create new token and store it. Returns existing token if token for user already exists
 def createTokenAndStore(username):

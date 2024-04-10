@@ -42,7 +42,10 @@ export default function CreateAccount() {
                 navigate("/StudentDashboard")
             } else if (responseJson["role"] == "Teacher") {
                 navigate("/TeacherDashboard")
+            } else if (responseJson["role"] == "Admin") {
+                navigate("/AdminPanel")
             }
+
         }
         else {
             setUsernameError(true);
@@ -138,4 +141,3 @@ export default function CreateAccount() {
         </Box>
     )
 }
-
