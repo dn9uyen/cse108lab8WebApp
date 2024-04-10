@@ -52,7 +52,7 @@ export default function EnrolledCoursesTableComponent(props) {
         const seatsArr = seats.split("/");
         if (enrolled) {
             return (
-                <Button variant="outlined" onClick={() => modifyCourse(!enrolled, courseName)} sx={{ fontSize: "1.25rem" }}>-</Button>
+                <Button variant="outlined" color="error" onClick={() => modifyCourse(!enrolled, courseName)} sx={{ fontSize: "1.25rem" }}>-</Button>
             )
         }
         else {
