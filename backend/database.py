@@ -85,7 +85,7 @@ def populateCourseTable():
         {"courseName": "Math 101", "teacher": "Ralph Jenkins", "time": "MWF 10:00-10:50 AM", "seatsTotal": 8, "seatsTaken": 0},
         {"courseName": "Physics 121", "teacher": "Susan Walker", "time": "TR 11:00-11:50 AM", "seatsTotal": 10, "seatsTaken": 0},
         {"courseName": "CS 106", "teacher": "Ammon Hepworth", "time": "MWF 2:00-2:50 PM", "seatsTotal": 10, "seatsTaken": 0},
-        {"courseName": "CS 162", "teacher": "Ammon Hepworth", "time": "TR 3:00-3:50 PM", "seatsTotal": 4, "seatsTaken": 0}
+        {"courseName": "CS 162", "teacher": "Ammon Hepworth", "time": "TR 3:00-3:50 PM", "seatsTotal": 4, "seatsTaken": 4}
     ]
     for course in courses:
         courseInfo = Course(
